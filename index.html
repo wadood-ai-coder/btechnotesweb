@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="en" class="light scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telangana B.Tech Connect - JNTUH & OU</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Theme Configuration -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        // New Modern Palette: Indigo & Amber
+                        primary: '#4338ca',     /* Indigo 700 */
+                        primaryLight: '#6366f1', /* Indigo 500 */
+                        primaryDark: '#312e81',  /* Indigo 900 */
+                        secondary: '#f59e0b',    /* Amber 500 */
+                        secondaryDark: '#d97706',/* Amber 600 */
+                        bgLight: '#f8fafc',      /* Slate 50 */
+                        // Dark mode specific colors
+                        darkBg: '#0f172a',       /* Slate 900 */
+                        darkSurface: '#1e293b',  /* Slate 800 */
+                        darkBorder: '#334155',   /* Slate 700 */
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    },
+                    boxShadow: {
+                        'glow': '0 0 20px rgba(99, 102, 241, 0.5)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.05)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Base styles */
+        body { 
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Improved Glassmorphism Navigation */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+        
+        /* Dark Mode Glass */
+        .dark .glass-nav {
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-up { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Scroll Animations */
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .animate-scroll-left {
+            animation: scroll-left 40s linear infinite;
+        }
+
+        /* Hover Pause for Marquee */
+        .hover\:pause:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+        /* AI Typing Dot Animation */
+        .typing-dot {
+            animation: typing 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* Gradient Text Utility */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(to right, #4338ca, #6366f1, #ec4899);
+        }
+        .dark .text-gradient {
+            background-image: linear-gradient(to right, #818cf8, #a78bfa, #f472b6);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-sans bg-bgLight text-slate-900 dark:bg-darkBg dark:text-slate-100 selection:bg-primary selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-[100] glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex items-center cursor-pointer hover:opacity-80 transition group" onclick="app.router('landing')">
+                    <div class="h-10 w-10 bg-gradient-to-br from-primary to-violet-600 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-indigo-500/30 mr-3 group-hover:scale-105 transition-transform duration-300">B</div>
+                    <div>
+                        <h1 class="font-bold text-xl text-slate-900 dark:text-white leading-none tracking-tight">Telangana</h1>
+                        <span class="text-[10px] text-primary dark:text-indigo-400 font-bold tracking-widest uppercase">B.Tech Connect</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-1" id="nav-items">
+                    <!-- Injected via JS -->
+                </div>
+
+                <!-- Mobile Menu & Theme Toggle (Mobile) -->
+                <div class="md:hidden flex items-center gap-3">
+                    <button onclick="app.toggleTheme()" class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition focus:outline-none">
+                        <svg class="w-6 h-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg class="w-6 h-6 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                    <button onclick="app.toggleMobileMenu()" class="text-slate-600 dark:text-slate-300 hover:text-primary p-2 focus:outline-none rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <!-- Hamburger Icon -->
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 dark:bg-darkSurface/95 backdrop-blur-xl border-b border-gray-100 dark:border-darkBorder px-4 py-4 space-y-2 shadow-2xl absolute w-full z-40 transition-all duration-300 origin-top">
+             <!-- Injected via JS -->
+        </div>
+    </nav>
+
+    <!-- Main Application Container -->
+    <main id="app-root" class="pt-20 flex-grow relative transition-colors duration-300">
+        <!-- Views injected here by JavaScript -->
+    </main>
+
+    <!-- Authentication Modal Overlay -->
+    <div id="auth-modal" class="fixed inset-0 z-[110] hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm transition-opacity opacity-0">
+        <div class="bg-white dark:bg-darkSurface rounded-3xl shadow-2xl w-full max-w-md p-8 transform scale-95 transition-all duration-300 relative overflow-hidden border border-white/20 dark:border-slate-700 ring-1 ring-black/5 mx-4" id="auth-box">
+            <!-- Decorative blobs for modal -->
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-secondary/10 rounded-full blur-3xl"></div>
+            
+            <button onclick="app.toggleAuth()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 z-10 p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div id="auth-content" class="relative z-10"></div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-2xl shadow-xl shadow-slate-900/20 transform translate-y-24 opacity-0 transition-all duration-500 z-[120] flex items-center gap-3 border border-white/10 dark:border-slate-200">
+        <div id="toast-icon" class="text-xl">✨</div>
+        <span id="toast-msg" class="font-medium text-sm">Notification Message</span>
+    </div>
+
+    <!-- ========================================= -->
+    <!--              JAVASCRIPT LOGIC             -->
+    <!-- ========================================= -->
+    <script>
+        const app = {
+            // --- Application State ---
+            state: {
+                currentUser: null, 
+                view: 'landing',
+                theme: 'light',
+                users: [
+                    // Default user for demo with Quiz Stats initialized
+                    { 
+                        name: 'Raju Student', 
+                        email: 'raju@gmail.com', 
+                        password: 'user123', 
+                        university: 'JNTUH', 
+                        roll: '21J11A0582', 
+                        role: 'student', 
+                        branch: 'CSE', 
+                        year: '2', 
+                        semester: '2', 
+                        cgpa: '8.4', 
+                        attendance: '78%', 
+                        profileImage: null,
+                    },
+                    { name: 'Priya Reddy', email: 'priya.r@gmail.com', password: 'user123', university: 'OU', roll: '100521733021', role: 'student', branch: 'ECE', year: '3', semester: '1', cgpa: '9.1', attendance: '92%', profileImage: null },
+                    { name: 'Ananya Gupta', email: 'anu.g@gmail.com', password: 'user123', university: 'JNTUH', roll: '22J11A0412', role: 'student', branch: 'CIVIL', year: '1', semester: '2', cgpa: '7.8', attendance: '65%', profileImage: null },
+                    { name: 'Karthik M', email: 'karthik.m@gmail.com', password: 'user123', university: 'OU', roll: '100521736044', role: 'student', branch: 'MECH', year: '4', semester: '1', cgpa: '8.2', attendance: '88%', profileImage: null },
+                    { name: 'Sai Krishna', email: 'sai.k@gmail.com', password: 'user123', university: 'JNTUH', roll: '21J11A0555', role: 'student', branch: 'CSE', year: '2', semester: '2', cgpa: '8.9', attendance: '95%', profileImage: null }
+                ],
+                feedbacks: [
+                    { id: 1, name: 'Srinivas Rao', email: 'srinivas@gmail.com', message: 'The notes for Data Structures are really helpful! Please add more for Java.', reply: 'Thank you Srinivas! We are working on Java notes.', date: '2 hrs ago' },
+                    { id: 2, name: 'Manisha K', email: 'manisha@gmail.com', message: 'Can you upload previous year question papers for ECE?', reply: null, date: '1 day ago' },
+                    { id: 3, name: 'Raju Student', email: 'raju@gmail.com', message: 'When will the results for Sem 1 be updated?', reply: 'Hi Raju, we expect them by next week.', date: 'Yesterday' }
+                ],
+                adminCreds: { email: 'admin@btech.com', password: 'admin123' },
+                branches: ['CSE', 'CSD', 'AIML', 'AIDS', 'EEE', 'ECE', 'CIVIL', 'MECHANICAL'],
+                chatHistory: [
+                    { role: 'ai', content: "Hello! I'm your AI Study Companion. Ask me anything about your syllabus, solving math problems, or exam tips!" }
+                ],
+                resetFlow: { email: null, code: null }
+            },
+
+            // --- Syllabus Content Data (Strictly Ordered) ---
+            data: {
+                jntuh: [
+                    // === YEAR 1 - SEMESTER 1 ===
+                    { code: 'M1', title: 'Matrices & Calculus', year: '1', semester: '1', units: 5, videos: 12, impQ: true, progress: 0, color: 'blue', branches: ['COMMON'], videoLink: 'https://www.youtube.com/playlist?list=PLeIE3weEKo4bfOsGyBN3BBGco-ESAfl0x', pdfLink: '#' },
+                    { code: 'PPS', title: 'Programming for Problem Solving', year: '1', semester: '1', units: 5, videos: 15, impQ: true, progress: 0, color: 'emerald', branches: ['COMMON'], videoLink: 'https://www.youtube.com/playlist?list=PLERZXVMwiajrLuf5K1SZW-Rx52djzJeXe', pdfLink: '#' },
+                    { code: 'AP', title: 'Applied Physics', year: '1', semester: '1', units: 5, videos: 10, impQ: true, progress: 0, color: 'purple', branches: ['CSE', 'CSD', 'AIML', 'AIDS', 'ECE'], videoLink: 'https://www.youtube.com/playlist?list=PLlpxmNjHjeGKGS1TYKmfVwu1fa7os7MjJ', pdfLink: '#' },
+                    { code: 'CHEM', title: 'Engineering Chemistry', year: '1', semester: '1', units: 5, videos: 10, impQ: true, progress: 0, color: 'teal', branches: ['EEE'], videoLink: 'https://www.youtube.com/playlist?list=PLhuajyy605oO5BElU56ywKKA8rwmCQQlB', pdfLink: '#' },
+                    { code: 'ECA1', title: 'Electrical Circuit Analysis-I', year: '1', semester: '1', units: 5, videos: 14, impQ: true, progress: 0, color: 'yellow', branches: ['EEE'], videoLink: 'https://www.youtube.com/playlist?list=PLBlnK6fEyqRhqzJT87LsdQKYZBC93ezDo2', pdfLink: '#' },
+                    { code: 'CP', title: 'C Programming', year: '1', semester: '1', units: 5, videos: 15, impQ: true, progress: 0, color: 'indigo', branches: ['ECE'], videoLink: 'https://www.youtube.com/playlist?list=PLERZXVMwiajrLuf5K1SZW-Rx52djzJeXe', pdfLink: '#' },
+                    { code: 'EM', title: 'Engineering Mechanics', year: '1', semester: '1', units: 5, videos: 12, impQ: true, progress: 0, color: 'gray', branches: ['CIVIL'], videoLink: 'https://www.youtube.com/results?search_query=Engineering+Mechanics+B.Tech', pdfLink: '#' },
+                    { code: 'SUR', title: 'Surveying', year: '1', semester: '1', units: 5, videos: 10, impQ: true, progress: 0, color: 'orange', branches: ['CIVIL'], videoLink: 'https://www.youtube.com/results?search_query=Surveying+Civil+Engineering+B.Tech', pdfLink: '#' },
+                    { code: 'EG', title: 'Engineering Graphics', year: '1', semester: '1', units: 5, videos: 18, impQ: true, progress: 0, color: 'red', branches: ['MECHANICAL'], videoLink: 'https://www.youtube.com/playlist?list=PLD8E64553FE9321B3', pdfLink: '#' },
+                    { code: 'MET', title: 'Metallurgy', year: '1', semester: '1', units: 5, videos: 8, impQ: false, progress: 0, color: 'zinc', branches: ['MECHANICAL'], videoLink: 'https://www.youtube.com/results?search_query=Metallurgy+Mechanical+Engineering+B.Tech', pdfLink: '#' },
+                    
+                    // === YEAR 1 - SEMESTER 2 ===
+                    { code: 'ODEV', title: 'ODEs & Vector Calculus', year: '1', semester: '2', units: 5, videos: 14, impQ: true, progress: 0, color: 'blue', branches: ['COMMON'], videoLink: 'https://www.youtube.com/playlist?list=PLeIE3weEKo4bIryC_K877yI1-4qHqWc6L', pdfLink: '#' },
+                    { code: 'DS', title: 'Data Structures', year: '1', semester: '2', units: 5, videos: 20, impQ: true, progress: 0, color: 'indigo', branches: ['CSE', 'CSD', 'AIML', 'AIDS'], videoLink: 'https://www.youtube.com/playlist?list=PLERZXVMwiajoQ6BgB6PkmFq6g6Mnrm6uM', pdfLink: '#' },
+                    { code: 'CHEM', title: 'Engineering Chemistry', year: '1', semester: '2', units: 5, videos: 10, impQ: true, progress: 0, color: 'teal', branches: ['CSE', 'CSD', 'AIML', 'AIDS', 'ECE'], videoLink: 'https://www.youtube.com/playlist?list=PLhuajyy605oO5BElU56ywKKA8rwmCQQlB', pdfLink: '#' },
+                    { code: 'ED', title: 'Electronic Devices', year: '1', semester: '2', units: 5, videos: 15, impQ: true, progress: 0, color: 'amber', branches: ['ECE'], videoLink: 'https://www.youtube.com/playlist?list=PLBlnK6fEyqRiw-GZRqfnlVIBz9dxrqHJS2', pdfLink: '#' },
+                    { code: 'AP', title: 'Applied Physics', year: '1', semester: '2', units: 5, videos: 10, impQ: true, progress: 0, color: 'purple', branches: ['EEE'], videoLink: 'https://www.youtube.com/playlist?list=PLlpxmNjHjeGKGS1TYKmfVwu1fa7os7MjJ', pdfLink: '#' },
+                    { code: 'ECA2', title: 'Electrical Circuit Analysis-II', year: '1', semester: '2', units: 5, videos: 14, impQ: true, progress: 0, color: 'yellow', branches: ['EEE'], videoLink: 'https://www.youtube.com/playlist?list=PLBlnK6fEyqRhqzJT87LsdQKYZBC93ezDo2', pdfLink: '#' },
+                    { code: 'SM', title: 'Strength of Materials', year: '1', semester: '2', units: 5, videos: 16, impQ: true, progress: 0, color: 'stone', branches: ['CIVIL'], videoLink: 'https://www.youtube.com/results?search_query=Strength+of+Materials+B.Tech', pdfLink: '#' },
+                    { code: 'FM', title: 'Fluid Mechanics', year: '1', semester: '2', units: 5, videos: 15, impQ: true, progress: 0, color: 'cyan', branches: ['CIVIL'], videoLink: 'https://www.youtube.com/results?search_query=Fluid+Mechanics+B.Tech', pdfLink: '#' },
+                    { code: 'TD', title: 'Thermodynamics', year: '1', semester: '2', units: 5, videos: 18, impQ: true, progress: 0, color: 'red', branches: ['MECHANICAL'], videoLink: 'https://www.youtube.com/results?search_query=Thermodynamics+B.Tech', pdfLink: '#' },
+                    { code: 'MOS', title: 'Mechanics of Solids', year: '1', semester: '2', units: 5, videos: 15, impQ: true, progress: 0, color: 'gray', branches: ['MECHANICAL'], videoLink: 'https://www.youtube.com/results?search_query=Mechanics+of+Solids+B.Tech', pdfLink: '#' },
+
+                    // === YEAR 2 - SEMESTER 1 ===
+                    { code: 'DM', title: 'Discrete Mathematics', year: '2', semester: '1', units: 5, videos: 15, impQ: true, progress: 0, color: 'indigo', branches: ['CSE', 'CSD'], videoLink: '#', pdfLink: '#' },
+                    { code: 'COA', title: 'Computer Org & Architecture', year: '2', semester: '1', units: 5, videos: 12, impQ: true, progress: 0, color: 'blue', branches: ['CSE', 'ECE'], videoLink: '#', pdfLink: '#' },
+                    { code: 'OOP', title: 'Python Programming', year: '2', semester: '1', units: 5, videos: 18, impQ: true, progress: 0, color: 'yellow', branches: ['COMMON'], videoLink: '#', pdfLink: '#' },
+                    { code: 'BEFA', title: 'Business Economics & FA', year: '2', semester: '1', units: 5, videos: 10, impQ: false, progress: 0, color: 'green', branches: ['COMMON'], videoLink: '#', pdfLink: '#' },
+                    { code: 'ADE', title: 'Analog Digital Electronics', year: '2', semester: '1', units: 5, videos: 14, impQ: true, progress: 0, color: 'red', branches: ['ECE', 'EEE'], videoLink: '#', pdfLink: '#' },
+
+                    // === YEAR 2 - SEMESTER 2 ===
+                    { code: 'OS', title: 'Operating Systems', year: '2', semester: '2', units: 5, videos: 20, impQ: true, progress: 45, color: 'red', branches: ['CSE', 'CSD', 'AIML'], videoLink: '#', pdfLink: '#' },
+                    { code: 'DBMS', title: 'Database Management Systems', year: '2', semester: '2', units: 5, videos: 22, impQ: true, progress: 30, color: 'purple', branches: ['CSE', 'CSD', 'AIML'], videoLink: '#', pdfLink: '#' },
+                    { code: 'SE', title: 'Software Engineering', year: '2', semester: '2', units: 5, videos: 15, impQ: true, progress: 10, color: 'pink', branches: ['CSE', 'CSD'], videoLink: '#', pdfLink: '#' },
+                    { code: 'JAVA', title: 'Java Programming', year: '2', semester: '2', units: 5, videos: 25, impQ: true, progress: 60, color: 'orange', branches: ['CSE', 'CSD', 'ECE'], videoLink: '#', pdfLink: '#' },
+                    { code: 'CI', title: 'Constitution of India', year: '2', semester: '2', units: 5, videos: 8, impQ: false, progress: 90, color: 'teal', branches: ['COMMON'], videoLink: '#', pdfLink: '#' },
+
+                    // === YEAR 3 - SEMESTER 1 ===
+                    { code: 'FLAT', title: 'Formal Lang & Automata', year: '3', semester: '1', units: 5, videos: 15, impQ: true, progress: 0, color: 'indigo', branches: ['CSE', 'CSD'], videoLink: '#', pdfLink: '#' },
+                    { code: 'CN', title: 'Computer Networks', year: '3', semester: '1', units: 5, videos: 18, impQ: true, progress: 0, color: 'blue', branches: ['CSE', 'ECE'], videoLink: '#', pdfLink: '#' },
+                    { code: 'WT', title: 'Web Technologies', year: '3', semester: '1', units: 5, videos: 20, impQ: true, progress: 0, color: 'yellow', branches: ['CSE', 'CSD'], videoLink: '#', pdfLink: '#' },
+
+                    // === YEAR 3 - SEMESTER 2 ===
+                    { code: 'ML', title: 'Machine Learning', year: '3', semester: '2', units: 5, videos: 22, impQ: true, progress: 0, color: 'green', branches: ['CSE', 'AIML'], videoLink: '#', pdfLink: '#' },
+                    { code: 'CD', title: 'Compiler Design', year: '3', semester: '2', units: 5, videos: 15, impQ: true, progress: 0, color: 'red', branches: ['CSE'], videoLink: '#', pdfLink: '#' },
+                    { code: 'STM', title: 'Software Testing Methodologies', year: '3', semester: '2', units: 5, videos: 12, impQ: true, progress: 0, color: 'gray', branches: ['CSE'], videoLink: '#', pdfLink: '#' },
+
+                    // === YEAR 4 - SEMESTER 1 ===
+                    { code: 'CC', title: 'Cloud Computing', year: '4', semester: '1', units: 5, videos: 18, impQ: true, progress: 0, color: 'blue', branches: ['CSE', 'CSD'], videoLink: '#', pdfLink: '#' },
+                    { code: 'DM', title: 'Data Mining', year: '4', semester: '1', units: 5, videos: 16, impQ: true, progress: 0, color: 'purple', branches: ['CSE'], videoLink: '#', pdfLink: '#' },
+
+                    // === YEAR 4 - SEMESTER 2 ===
+                    { code: 'PW', title: 'Project Work', year: '4', semester: '2', units: 1, videos: 5, impQ: false, progress: 0, color: 'green', branches: ['COMMON'], videoLink: '#', pdfLink: '#' },
+                    { code: 'SEM', title: 'Technical Seminar', year: '4', semester: '2', units: 1, videos: 2, impQ: false, progress: 0, color: 'teal', branches: ['COMMON'], videoLink: '#', pdfLink: '#' }
+                ],
+                ou: [], 
+                recentActivity: [
+                    { type: 'video', title: 'Watched "Introduction to OS"', time: '2 hours ago', icon: '▶️' },
+                    { type: 'download', title: 'Downloaded "Unit 1 Notes"', time: 'Yesterday', icon: '📄' },
+                    { type: 'quiz', title: 'Checked Important Questions', time: '2 days ago', icon: '📝' }
+                ]
+            },
+
+            // --- Core Functions ---
+            init: () => {
+                app.data.ou = app.data.jntuh; 
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                    app.setTheme('dark');
+                } else {
+                    app.setTheme('light');
+                }
+                const storedUsers = localStorage.getItem('btech_users');
+                if (storedUsers) {
+                    app.state.users = JSON.parse(storedUsers);
+                } else {
+                    localStorage.setItem('btech_users', JSON.stringify(app.state.users));
+                }
+                
+                // Login Persistence Logic
+                const storedSession = localStorage.getItem('btech_current_user');
+                if (storedSession) {
+                    app.state.currentUser = JSON.parse(storedSession);
+                    app.renderNav(); // Ensure nav is rendered for logged in user
+                    app.router('dashboard'); // Auto-redirect to dashboard if logged in
+                } else {
+                    app.renderNav();
+                    app.router('landing');
+                }
+
+                const storedFeedbacks = localStorage.getItem('btech_feedbacks');
+                if (storedFeedbacks) {
+                    app.state.feedbacks = JSON.parse(storedFeedbacks);
+                } else {
+                    localStorage.setItem('btech_feedbacks', JSON.stringify(app.state.feedbacks));
+                }
+                
+                app.initScrollAnimation();
+            },
+
+            setTheme: (theme) => {
+                app.state.theme = theme;
+                document.documentElement.classList.toggle('dark', theme === 'dark');
+                localStorage.setItem('theme', theme);
+                Chart.defaults.color = theme === 'dark' ? '#cbd5e1' : '#4b5563';
+                Chart.defaults.borderColor = theme === 'dark' ? '#334155' : '#e2e8f0';
+                app.renderNav();
+                // Re-render current view to apply theme to charts etc if needed
+                if(app.state.view === 'profile' || app.state.view === 'dashboard' || app.state.view === 'analytics') app.router(app.state.view);
+            },
+
+            toggleTheme: () => app.setTheme(app.state.theme === 'light' ? 'dark' : 'light'),
+
+            // NEW: Navbar Toggle Logic
+            toggleMobileMenu: () => {
+                const menu = document.getElementById('mobile-menu');
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                } else {
+                    menu.classList.add('hidden');
+                }
+            },
+
+            initScrollAnimation: () => {
+                window.addEventListener('scroll', () => {
+                    const scrolled = window.scrollY;
+                    
+                    // NEW STACK ANIMATION LOGIC
+                    const stackSection = document.getElementById('stack-section');
+                    if (stackSection) {
+                        const rect = stackSection.getBoundingClientRect();
+                        const viewportHeight = window.innerHeight;
+                        const sectionHeight = rect.height;
+                        
+                        let progress = -rect.top / (sectionHeight - viewportHeight);
+                        progress = Math.max(0, Math.min(1, progress));
+
+                        const cards = document.querySelectorAll('.stack-card');
+                        const title = document.getElementById('stack-title');
+                        const subtitle = document.getElementById('stack-subtitle');
+
+                        if(title && subtitle) {
+                            if(progress > 0.1) {
+                                title.style.opacity = '0';
+                                subtitle.style.opacity = '0';
+                            } else {
+                                title.style.opacity = '1';
+                                subtitle.style.opacity = '1';
+                            }
+                        }
+
+                        cards.forEach((card, index) => {
+                            // Target positions stored in data attributes
+                            const targetX = parseInt(card.dataset.x);
+                            const targetY = parseInt(card.dataset.y);
+                            const targetR = parseInt(card.dataset.r);
+                            
+                            // Interpolate
+                            // Easing function for smoother spread
+                            const ease = t => t * (2 - t); 
+                            const p = ease(progress);
+
+                            const currentX = targetX * p;
+                            const currentY = targetY * p;
+                            const currentR = targetR * (1 - p); // Rotate back to 0 or spread out? Let's spread to 0 rotation from a messy pile
+                            const scale = 1 - (0.2 * (1 - p)); // Scale up from 0.8 to 1
+                            
+                            card.style.transform = `translate(calc(-50% + ${currentX}px), calc(-50% + ${currentY}px)) rotate(${currentR}deg) scale(${scale})`;
+                            card.style.opacity = Math.min(1, 0.5 + p);
+                        });
+                    }
+                });
+            },
+
+            router: (viewName) => {
+                const protectedRoutes = ['dashboard', 'profile', 'notes', 'questions', 'edit-profile', 'ai-solver'];
+                if (protectedRoutes.includes(viewName) && !app.state.currentUser) {
+                    app.showToast('🔒 Login required to access Premium Content', '🔑');
+                    app.toggleAuth('login');
+                    return;
+                }
+                if (viewName === 'admin' && app.state.currentUser?.role !== 'admin') {
+                    app.showToast('Access Denied: Admin only', '⛔');
+                    app.router('landing');
+                    return;
+                }
+                app.state.view = viewName;
+                const root = document.getElementById('app-root');
+                root.innerHTML = ''; 
+                if (viewName === 'landing') app.views.renderLanding(root);
+                else if (viewName === 'dashboard') app.views.renderDashboard(root);
+                else if (viewName === 'analytics') app.views.renderAnalytics(root);
+                else if (viewName === 'profile') app.views.renderProfile(root);
+                else if (viewName === 'edit-profile') app.views.renderEditProfile(root);
+                else if (viewName === 'notes') app.views.renderNotes(root);
+                else if (viewName === 'questions') app.views.renderQuestions(root);
+                else if (viewName === 'contact') app.views.renderContact(root);
+                else if (viewName === 'admin') app.views.renderAdmin(root);
+                else if (viewName === 'ai-solver') app.views.renderAiSolver(root);
+                
+                window.scrollTo(0,0);
+                app.renderNav();
+                document.getElementById('mobile-menu').classList.add('hidden');
+            },
+
+            // --- Feedback Functions ---
+            handleFeedbackSubmit: (e) => {
+                e.preventDefault();
+                const msg = document.getElementById('feedback-msg').value;
+                let name = 'Guest Student';
+                let email = '';
+                if(app.state.currentUser) {
+                    name = app.state.currentUser.name;
+                    email = app.state.currentUser.email;
+                } else {
+                    const guestName = document.getElementById('feedback-name').value;
+                    if(guestName) name = guestName;
+                }
+                const newFeedback = {
+                    id: Date.now(),
+                    name: name,
+                    email: email,
+                    message: msg,
+                    reply: null,
+                    date: new Date().toLocaleDateString()
+                };
+                app.state.feedbacks.unshift(newFeedback);
+                localStorage.setItem('btech_feedbacks', JSON.stringify(app.state.feedbacks));
+                app.showToast('Feedback Submitted Successfully!', '📝');
+                document.getElementById('feedback-msg').value = '';
+                if(!app.state.currentUser) document.getElementById('feedback-name').value = '';
+            },
+
+            handleAdminReply: (e, id) => {
+                e.preventDefault();
+                const replyText = e.target.reply.value;
+                const feedbackIndex = app.state.feedbacks.findIndex(f => f.id === id);
+                if(feedbackIndex !== -1) {
+                    app.state.feedbacks[feedbackIndex].reply = replyText;
+                    localStorage.setItem('btech_feedbacks', JSON.stringify(app.state.feedbacks));
+                    app.showToast('Reply sent successfully!', '✅');
+                    app.router('admin');
+                }
+            },
+
+            toggleAuth: (mode = 'login') => {
+                const modal = document.getElementById('auth-modal');
+                if (modal.classList.contains('hidden')) {
+                    modal.classList.remove('hidden');
+                    if(mode === 'signup') app.views.renderSignupForm(document.getElementById('auth-content'));
+                    else app.views.renderLoginForm(document.getElementById('auth-content'));
+                    setTimeout(() => {
+                        modal.classList.remove('opacity-0');
+                        document.getElementById('auth-box').classList.remove('scale-95');
+                        document.getElementById('auth-box').classList.add('scale-100');
+                    }, 10);
+                } else {
+                    modal.classList.add('opacity-0');
+                    document.getElementById('auth-box').classList.remove('scale-100');
+                    document.getElementById('auth-box').classList.add('scale-95');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+                }
+            },
+
+            checkPasswordStrength: (value) => {
+                const bar = document.getElementById('pass-strength-bar');
+                const text = document.getElementById('pass-strength-text');
+                if(!bar || !text) return;
+                let strength = 0;
+                if (value.length > 7) strength++;
+                if (value.match(/[a-z]/) && value.match(/[A-Z]/)) strength++;
+                if (value.match(/\d/)) strength++;
+                if (value.match(/[^a-zA-Z\d]/)) strength++;
+                let width = '0%';
+                let color = 'bg-gray-200';
+                let label = 'Enter Password';
+                switch(strength) {
+                    case 0: width = '0%'; label = 'Too Short'; break;
+                    case 1: width = '25%'; color = 'bg-red-500'; label = 'Weak'; break;
+                    case 2: width = '50%'; color = 'bg-orange-500'; label = 'Medium'; break;
+                    case 3: width = '75%'; color = 'bg-yellow-500'; label = 'Good'; break;
+                    case 4: width = '100%'; color = 'bg-green-500'; label = 'Strong'; break;
+                }
+                bar.className = `h-1.5 rounded-full transition-all duration-300 ${color}`;
+                bar.style.width = width;
+                text.innerText = label;
+                text.className = `text-xs text-right mt-1.5 font-medium ${strength >= 3 ? 'text-green-600' : (strength === 2 ? 'text-orange-500' : 'text-red-500')}`;
+            },
+
+            handleLogin: (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value.trim().toLowerCase();
+                const pass = document.getElementById('login-pass').value;
+                if (email === app.state.adminCreds.email && pass === app.state.adminCreds.password) {
+                    app.state.currentUser = { name: 'Administrator', email: email, role: 'admin', university: 'ALL' };
+                    // Save session
+                    localStorage.setItem('btech_current_user', JSON.stringify(app.state.currentUser));
+                    app.toggleAuth(); app.showToast('Welcome back, Admin.', '👨‍💼'); app.router('admin'); return;
+                }
+                const user = app.state.users.find(u => u.email.toLowerCase() === email && u.password === pass);
+                if (user) {
+                    app.state.currentUser = user;
+                    // Save session
+                    localStorage.setItem('btech_current_user', JSON.stringify(app.state.currentUser));
+                    app.toggleAuth(); 
+                    app.showToast(`Welcome back, ${user.name}!`, '👋'); 
+                    app.router('dashboard');
+                } else {
+                    app.showError('Invalid email or password.');
+                }
+            },
+
+            handleSignup: (e) => {
+                e.preventDefault();
+                const name = document.getElementById('signup-name').value.trim();
+                const email = document.getElementById('signup-email').value.trim().toLowerCase();
+                const pass = document.getElementById('signup-pass').value;
+                if (!email.endsWith('@gmail.com')) {
+                    app.showError('Security Policy: Only @gmail.com addresses are allowed.');
+                    return;
+                }
+                const userExists = app.state.users.some(u => u.email.toLowerCase() === email);
+                if(userExists) { 
+                    app.showError('Security Alert: This Gmail ID is already registered. Please Log In.'); 
+                    return; 
+                }
+                if (pass.length < 8) {
+                    app.showError('Security Alert: Password is too weak. Minimum 8 characters required.');
+                    return;
+                }
+                const newUser = { 
+                    name, 
+                    email, 
+                    password: pass, 
+                    university: document.getElementById('signup-uni').value, 
+                    branch: document.getElementById('signup-branch').value, 
+                    roll: document.getElementById('signup-roll').value, 
+                    year: document.getElementById('signup-year').value, 
+                    semester: document.getElementById('signup-sem').value,
+                    role: 'student', cgpa: '0.0', attendance: '0%', profileImage: null
+                };
+                app.state.users.push(newUser);
+                localStorage.setItem('btech_users', JSON.stringify(app.state.users));
+                app.state.currentUser = newUser;
+                // Save session
+                localStorage.setItem('btech_current_user', JSON.stringify(newUser));
+                
+                app.toggleAuth(); app.showToast(`Secure Account created for ${newUser.branch}!`, '🔒'); app.router('dashboard');
+            },
+
+            handleForgotPassword: (e) => {
+                e.preventDefault();
+                const email = document.getElementById('reset-email').value.trim().toLowerCase();
+                const user = app.state.users.find(u => u.email.toLowerCase() === email);
+                if (!user) {
+                    app.showError('No account found with this email.');
+                    return;
+                }
+                const code = Math.floor(1000 + Math.random() * 9000).toString();
+                app.state.resetFlow = { email, code };
+                app.showToast(`Verification Code Sent: ${code}`, '📩');
+                app.views.renderVerifyCodeForm(document.getElementById('auth-content'));
+            },
+
+            handleVerifyCode: (e) => {
+                e.preventDefault();
+                const inputCode = document.getElementById('reset-code').value.trim();
+                if (inputCode === app.state.resetFlow.code) {
+                    app.showToast('Code Verified!', '✅');
+                    app.views.renderNewPasswordForm(document.getElementById('auth-content'));
+                } else {
+                    app.showError('Invalid verification code.');
+                }
+            },
+
+            handleResetPassword: (e) => {
+                e.preventDefault();
+                const newPass = document.getElementById('new-password').value;
+                if (newPass.length < 8) {
+                    app.showError('Password must be at least 8 characters.');
+                    return;
+                }
+                const userIndex = app.state.users.findIndex(u => u.email.toLowerCase() === app.state.resetFlow.email);
+                if (userIndex !== -1) {
+                    app.state.users[userIndex].password = newPass;
+                    localStorage.setItem('btech_users', JSON.stringify(app.state.users));
+                    app.state.resetFlow = { email: null, code: null }; 
+                    app.showToast('Password reset successfully! Please login.', '🎉');
+                    app.views.renderLoginForm(document.getElementById('auth-content'));
+                }
+            },
+
+            handleProfileUpdate: (e) => {
+                e.preventDefault();
+                const user = app.state.currentUser;
+                user.name = document.getElementById('edit-name').value;
+                user.university = document.getElementById('edit-uni').value;
+                user.roll = document.getElementById('edit-roll').value;
+                user.branch = document.getElementById('edit-branch').value;
+                user.year = document.getElementById('edit-year').value;
+                user.semester = document.getElementById('edit-sem').value;
+                const saveAndRedirect = () => {
+                    const index = app.state.users.findIndex(u => u.email === user.email);
+                    if (index !== -1) {
+                        app.state.users[index] = user;
+                        localStorage.setItem('btech_users', JSON.stringify(app.state.users));
+                        // Update session storage too so refresh keeps new data
+                        localStorage.setItem('btech_current_user', JSON.stringify(user));
+                    }
+                    app.showToast('Profile Updated Successfully!', '✅');
+                    app.router('profile');
+                };
+                const fileInput = document.getElementById('edit-image');
+                if (fileInput.files && fileInput.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        user.profileImage = evt.target.result;
+                        saveAndRedirect();
+                    }
+                    reader.readAsDataURL(fileInput.files[0]);
+                } else {
+                    saveAndRedirect();
+                }
+            },
+
+            handleImagePreview: (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        const img = document.getElementById('profile-preview-img');
+                        img.src = evt.target.result;
+                        img.classList.remove('hidden');
+                        const div = document.getElementById('profile-preview-div');
+                        if(div) div.classList.add('hidden');
+                    }
+                    reader.readAsDataURL(file);
+                }
+            },
+
+            handleContactSubmit: (e) => {
+                e.preventDefault(); app.showToast('Message sent!', '📬'); app.router('landing');
+            },
+
+            logout: () => { 
+                app.state.currentUser = null; 
+                localStorage.removeItem('btech_current_user'); // Clear session
+                app.showToast('Logged out.', '🔒'); 
+                app.router('landing'); 
+            },
+
+            showToast: (msg, icon = '✨') => {
+                const t = document.getElementById('toast');
+                document.getElementById('toast-msg').innerText = msg; document.getElementById('toast-icon').innerText = icon;
+                t.classList.remove('translate-y-24', 'opacity-0');
+                setTimeout(() => t.classList.add('translate-y-24', 'opacity-0'), 3000);
+            },
+
+            showError: (msg) => {
+                const d = document.getElementById('auth-error');
+                if(d) { d.innerText = msg; d.classList.remove('hidden'); } else alert(msg);
+            },
+
+            getFilteredSubjects: () => {
+                const user = app.state.currentUser;
+                if (!user) return [];
+                const allSubjects = user.university === 'JNTUH' ? app.data.jntuh : app.data.ou;
+                return allSubjects.filter(sub => {
+                    const yearMatch = sub.year === user.year;
+                    const semMatch = sub.semester === user.semester;
+                    let branchMatch = false;
+                    if (sub.branches) {
+                        branchMatch = sub.branches.includes('COMMON') || sub.branches.includes(user.branch);
+                    }
+                    return yearMatch && semMatch && branchMatch;
+                });
+            },
+
+            handleAiChat: (e) => {
+                e.preventDefault();
+                const input = document.getElementById('ai-input');
+                const message = input.value.trim();
+                if(!message) return;
+                app.state.chatHistory.push({ role: 'user', content: message });
+                app.updateChatUI();
+                input.value = '';
+                const chatBox = document.getElementById('chat-box');
+                const thinkingDiv = document.createElement('div');
+                thinkingDiv.id = 'ai-thinking';
+                thinkingDiv.className = 'flex justify-start mb-4';
+                thinkingDiv.innerHTML = `<div class="bg-gray-100 dark:bg-slate-700/50 rounded-2xl rounded-tl-none p-4 flex items-center space-x-1"><div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div><div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div><div class="w-2 h-2 bg-slate-400 rounded-full typing-dot"></div></div>`;
+                chatBox.appendChild(thinkingDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                setTimeout(() => {
+                    const response = app.generateAiResponse(message);
+                    document.getElementById('ai-thinking').remove();
+                    app.state.chatHistory.push({ role: 'ai', content: response });
+                    app.updateChatUI();
+                }, 1500);
+            },
+
+            updateChatUI: () => {
+                const chatBox = document.getElementById('chat-box');
+                chatBox.innerHTML = app.state.chatHistory.map(msg => `
+                    <div class="flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} mb-6">
+                        <div class="flex items-end max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse space-x-reverse space-x-3' : 'space-x-3'}">
+                            <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-xs font-bold ${msg.role === 'user' ? 'bg-primary text-white shadow-lg shadow-primary/30' : 'bg-green-500 text-white shadow-lg shadow-green-500/30'}">
+                                ${msg.role === 'user' ? 'U' : 'AI'}
+                            </div>
+                            <div class="px-5 py-3.5 rounded-2xl ${msg.role === 'user' ? 'bg-primary text-white rounded-br-none shadow-md shadow-primary/20' : 'bg-white dark:bg-slate-800 dark:text-slate-100 shadow-sm border border-slate-100 dark:border-slate-700 rounded-bl-none'}">
+                                <p class="text-sm leading-relaxed whitespace-pre-wrap">${msg.content}</p>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                chatBox.scrollTop = chatBox.scrollHeight;
+            },
+
+            generateAiResponse: (msg) => {
+                msg = msg.toLowerCase();
+                if (msg.includes('syllabus') || msg.includes('subject')) return "You can view your complete syllabus and subjects in the 'Notes' or 'Dashboard' section. I can help you understand specific topics if you ask!";
+                if (msg.includes('pass') || msg.includes('marks')) return "For JNTUH/OU, the passing marks are usually 35% in external exams (26/75). Combined with internals, you need 40% overall. Check your university guidelines for R18/R22 regulations.";
+                if (msg.includes('credit')) return "Credits are assigned based on the subject's weightage. Core subjects usually have 3 or 4 credits, while labs have 1.5. You need a specific total of credits to be promoted to the next year.";
+                if (msg.includes('hello') || msg.includes('hi')) return "Hello student! I'm ready to help you solve problems. Try asking me a math question like 'solve 2x + 5 = 15' or ask about a concept.";
+                if (msg.match(/solve|calc|\d/)) {
+                    try {
+                        const cleanMath = msg.replace(/[a-z\?]/g, ''); 
+                        if(cleanMath.length > 2) {
+                            return "The answer to that calculation is approximately: " + eval(cleanMath); 
+                        }
+                    } catch (e) {}
+                }
+                return "That's an interesting question! To solve advanced problems, I would need to be connected to a backend Python kernel. For now, I can help with general academic queries, syllabus info, and study tips. Try asking 'How to study for Data Structures?'";
+            },
+
+            renderNav: () => {
+                const u = app.state.currentUser;
+                const linkClass = (p) => `px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${app.state.view === p ? 'text-primary dark:text-indigo-400 bg-indigo-50 dark:bg-slate-800/50 shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-indigo-400 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`;
+                const themeBtn = `
+                    <button onclick="app.toggleTheme()" class="ml-2 p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 transition transform active:scale-95" title="Toggle Theme">
+                        <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    </button>
+                `;
+                
+                // Quiz Removed from Links
+                let desk = `<button onclick="app.router('landing')" class="${linkClass('landing')}">Home</button><button onclick="app.router('analytics')" class="${linkClass('analytics')}">Trends 📈</button><button onclick="app.router('notes')" class="${linkClass('notes')}">Notes</button><button onclick="app.router('questions')" class="${linkClass('questions')}">Imp Questions</button><button onclick="app.router('ai-solver')" class="${linkClass('ai-solver')} flex items-center gap-1"><span class="text-lg">✨</span>AI Solver</button><button onclick="app.router('contact')" class="${linkClass('contact')}">Contact</button>${themeBtn}`;
+                let mob = `<button onclick="app.router('landing')" class="block w-full text-left py-3 px-2 text-slate-700 dark:text-slate-200 border-b border-slate-50 dark:border-slate-700 font-medium">Home</button><button onclick="app.router('analytics')" class="block w-full text-left py-3 px-2 text-slate-700 dark:text-slate-200 border-b border-slate-50 dark:border-slate-700 font-medium">Placement Trends 📈</button><button onclick="app.router('notes')" class="block w-full text-left py-3 px-2 text-slate-700 dark:text-slate-200 border-b border-slate-50 dark:border-slate-700 font-medium">Notes</button><button onclick="app.router('questions')" class="block w-full text-left py-3 px-2 text-slate-700 dark:text-slate-200 border-b border-slate-50 dark:border-slate-700 font-medium">Imp Qs</button><button onclick="app.router('ai-solver')" class="block w-full text-left py-3 px-2 text-primary font-bold dark:text-indigo-400 border-b border-slate-50 dark:border-slate-700">✨ AI Solver</button><button onclick="app.router('contact')" class="block w-full text-left py-3 px-2 text-slate-700 dark:text-slate-200 border-b border-slate-50 dark:border-slate-700 font-medium">Contact</button>`;
+
+                if (u) {
+                    const av = u.profileImage ? `<img src="${u.profileImage}" class="w-8 h-8 rounded-full object-cover border-2 border-white shadow-md">` : `<div class="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-indigo-500 text-white flex items-center justify-center font-bold text-xs shadow-md">${u.name.charAt(0)}</div>`;
+                    desk += `<div class="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>${u.role === 'admin' ? `<button onclick="app.router('admin')" class="px-4 py-2 text-sm font-bold text-primary dark:text-indigo-400 bg-indigo-50 dark:bg-slate-800 rounded-lg border border-indigo-100 dark:border-slate-700">Admin</button>` : `<button onclick="app.router('dashboard')" class="${linkClass('dashboard')}">Dashboard</button>`}<button onclick="app.router('profile')" class="ml-2 flex items-center space-x-2 pl-2 pr-4 py-1.5 rounded-full border border-slate-200 dark:border-slate-700 hover:border-primary dark:hover:border-indigo-400 hover:bg-white dark:hover:bg-darkSurface transition bg-white dark:bg-darkSurface shadow-sm group">${av}<span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary dark:group-hover:text-indigo-400">${u.name.split(' ')[0]}</span></button>`;
+                    mob += `<div class="pt-4 mt-2"><div class="flex items-center px-2 mb-4">${av.replace('w-8 h-8', 'w-10 h-10')}<div class="ml-3"><p class="font-bold text-slate-900 dark:text-white">${u.name}</p><p class="text-xs text-slate-500 dark:text-slate-400">${u.email}</p></div></div><button onclick="app.router('dashboard')" class="block w-full text-left py-3 px-2 text-primary dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-slate-800 rounded-lg mb-2">My Dashboard</button><button onclick="app.router('profile')" class="block w-full text-left py-3 px-2 text-slate-700 dark:text-slate-200 font-medium">Profile</button><button onclick="app.logout()" class="block w-full text-left py-3 px-2 text-red-600 font-bold">Sign Out</button></div>`;
+                } else {
+                    desk += `<div class="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div><button onclick="app.toggleAuth('login')" class="text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-primary dark:hover:text-indigo-400 px-4 transition">Log In</button><button onclick="app.toggleAuth('signup')" class="bg-primary text-white px-5 py-2.5 rounded-xl hover:bg-primaryDark transition shadow-lg shadow-indigo-500/30 text-sm font-bold active:scale-95 transform">Get Started</button>`;
+                    mob += `<div class="grid grid-cols-2 gap-3 pt-4 mt-2"><button onclick="app.toggleAuth('login')" class="text-center py-3 border border-slate-200 dark:border-slate-700 rounded-xl font-bold text-slate-700 dark:text-slate-200">Log In</button><button onclick="app.toggleAuth('signup')" class="text-center py-3 bg-primary text-white rounded-xl font-bold shadow-lg shadow-indigo-500/20">Sign Up</button></div>`;
+                }
+                document.getElementById('nav-items').innerHTML = desk; document.getElementById('mobile-menu').innerHTML = mob;
+            },
+
+            views: {
+                renderLanding: (c) => {
+                    const feedbackInput = app.state.currentUser ? '' : `<div><label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5 ml-1">Your Name</label><input type="text" id="feedback-name" required placeholder="Enter your name" class="w-full px-5 py-3.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-darkSurface focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition shadow-sm hover:border-primary/30"></div>`;
+                    c.innerHTML = `
+                        <div class="fade-in">
+                            <div class="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 dark:from-darkSurface dark:to-darkBg">
+                                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03] dark:opacity-[0.05] dark:invert pointer-events-none"></div>
+                                <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+                                <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+                                
+                                <div class="max-w-7xl mx-auto pt-20 pb-32 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center relative z-10">
+                                    <div class="md:w-1/2 text-center md:text-left mb-16 md:mb-0">
+                                        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-slate-800/60 border border-indigo-100 dark:border-slate-700 text-primary dark:text-indigo-400 text-xs font-bold tracking-wide uppercase mb-8 shadow-sm backdrop-blur-sm">
+                                            <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                                            Telangana's #1 Learning Platform
+                                        </div>
+                                        <h1 class="text-5xl md:text-6xl tracking-tight font-extrabold text-slate-900 dark:text-white sm:text-7xl mb-8 leading-tight">
+                                            Master Your <br>
+                                            <span class="text-gradient">B.Tech Exams</span>
+                                        </h1>
+                                        <p class="mt-6 text-lg md:text-xl text-slate-600 dark:text-slate-400 sm:max-w-xl mx-auto md:mx-0 mb-10 leading-relaxed font-light">
+                                            Tailored specifically for <strong class="text-slate-900 dark:text-white font-semibold">JNTUH</strong> & <strong class="text-slate-900 dark:text-white font-semibold">Osmania University</strong>. Access notes, gunshot questions, and expert videos.
+                                        </p>
+                                        <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-5">
+                                            <button onclick="app.toggleAuth('signup')" class="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-1 active:scale-95 transition-all duration-300">Start Free Trial</button>
+                                            <button onclick="app.router('analytics')" class="px-8 py-4 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 font-bold rounded-2xl hover:bg-slate-50 dark:hover:bg-slate-700 hover:border-slate-300 transition duration-300 shadow-sm">View Trends 📈</button>
+                                        </div>
+                                    </div>
+                                    <div class="md:w-1/2 relative perspective-1000 mt-12 md:mt-0 w-full">
+                                        <div class="relative transform md:rotate-y-12 md:rotate-x-6 hover:rotate-0 transition-transform duration-700 ease-out">
+                                            <div class="bg-white/80 dark:bg-darkSurface/80 backdrop-blur-xl rounded-[2rem] shadow-2xl p-8 border border-white/40 dark:border-white/10 relative z-10">
+                                                <div class="flex justify-between items-center mb-8">
+                                                    <div>
+                                                        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Live Status</p>
+                                                        <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Data Structures</h3>
+                                                    </div>
+                                                    <div class="w-16 h-16 rounded-2xl bg-green-100 dark:bg-green-500/20 flex items-center justify-center text-green-600 dark:text-green-400 text-2xl font-bold border border-green-200 dark:border-green-500/30">82%</div>
+                                                </div>
+                                                <div class="space-y-6">
+                                                    <div>
+                                                        <div class="flex justify-between text-xs font-bold mb-2 text-slate-500 dark:text-slate-400 uppercase tracking-wide"><span>Attendance</span><span>90%</span></div>
+                                                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-3 overflow-hidden">
+                                                            <div class="bg-gradient-to-r from-primary to-violet-500 h-full rounded-full" style="width: 90%"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <div class="flex justify-between text-xs font-bold mb-2 text-slate-500 dark:text-slate-400 uppercase tracking-wide"><span>Assignments</span><span>4/5 Done</span></div>
+                                                        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-3 overflow-hidden">
+                                                            <div class="bg-gradient-to-r from-secondary to-orange-500 h-full rounded-full" style="width: 80%"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- Decorative Elements -->
+                                                <div class="absolute -top-6 -right-6 w-24 h-24 bg-gradient-to-br from-secondary to-orange-400 rounded-2xl shadow-xl -z-10 animate-pulse-slow opacity-80"></div>
+                                                <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-gradient-to-br from-primary to-indigo-400 rounded-2xl shadow-xl -z-10 animate-pulse-slow opacity-80" style="animation-delay: 1.5s;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tech Skills Marquee (Stable Logos) -->
+                            <div class="py-16 bg-white dark:bg-darkSurface border-y border-slate-100 dark:border-slate-800 relative">
+                                <div class="text-center mb-10">
+                                    <p class="text-xs font-bold text-primary dark:text-indigo-400 uppercase tracking-[0.2em] mb-2">Powered By Industry Standards</p>
+                                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white">Master Top Skills</h3>
+                                </div>
+                                <div class="max-w-6xl mx-auto px-4">
+                                    <div class="flex flex-wrap justify-center gap-8 md:gap-16 items-center grayscale hover:grayscale-0 transition-all duration-500">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="Python">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="Java">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="React">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="C++">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="Node.js">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="TensorFlow">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="AWS">
+                                        <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" class="h-12 w-12 opacity-60 hover:opacity-100 hover:scale-110 transition duration-300 transform" title="Git">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- NEW: Stack-to-Spread Scroll Animation Gallery (Replacing old Marquee) -->
+                            <div id="stack-section" class="relative bg-slate-50 dark:bg-darkBg" style="height: 300vh;">
+                                <div class="sticky top-0 h-screen flex items-center justify-center overflow-hidden perspective-1000">
+                                    <h2 class="absolute top-10 text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white z-10 transition-opacity duration-300 text-center px-4" id="stack-title">Visualize Your Future</h2>
+                                    <p class="absolute top-24 text-base md:text-lg text-slate-500 dark:text-slate-400 z-10 transition-opacity duration-300" id="stack-subtitle">Scroll down to explore domains</p>
+                                    
+                                    <div class="relative w-full max-w-5xl h-[600px] flex items-center justify-center" id="card-stack">
+                                        
+                                        <!-- Card 1 (Center) -->
+                                        <div class="stack-card absolute top-1/2 left-1/2 w-64 h-80 sm:w-72 sm:h-96 bg-white dark:bg-darkSurface rounded-3xl shadow-2xl border border-white/50 dark:border-slate-700 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 origin-center z-50" data-x="0" data-y="0" data-r="0">
+                                            <img src="https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=500&q=80" class="w-full h-full object-cover">
+                                            <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white font-bold">Artificial Intelligence</div>
+                                        </div>
+
+                                        <!-- Card 2 (Top Left) -->
+                                        <div class="stack-card absolute top-1/2 left-1/2 w-64 h-80 sm:w-72 sm:h-96 bg-white dark:bg-darkSurface rounded-3xl shadow-2xl border border-white/50 dark:border-slate-700 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 origin-center z-40" data-x="-300" data-y="-200" data-r="-12">
+                                            <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500&q=80" class="w-full h-full object-cover">
+                                            <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white font-bold">Data Science</div>
+                                        </div>
+
+                                        <!-- Card 3 (Top Right) -->
+                                        <div class="stack-card absolute top-1/2 left-1/2 w-64 h-80 sm:w-72 sm:h-96 bg-white dark:bg-darkSurface rounded-3xl shadow-2xl border border-white/50 dark:border-slate-700 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 origin-center z-30" data-x="300" data-y="-200" data-r="12">
+                                            <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500&q=80" class="w-full h-full object-cover">
+                                            <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white font-bold">Cybernetics</div>
+                                        </div>
+
+                                        <!-- Card 4 (Bottom Left) -->
+                                        <div class="stack-card absolute top-1/2 left-1/2 w-64 h-80 sm:w-72 sm:h-96 bg-white dark:bg-darkSurface rounded-3xl shadow-2xl border border-white/50 dark:border-slate-700 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 origin-center z-20" data-x="-300" data-y="200" data-r="-8">
+                                            <img src="https://images.unsplash.com/photo-1625314870267-3c7d3d7580b0?w=500&q=80" class="w-full h-full object-cover">
+                                            <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white font-bold">Cloud Computing</div>
+                                        </div>
+
+                                         <!-- Card 5 (Bottom Right) -->
+                                        <div class="stack-card absolute top-1/2 left-1/2 w-64 h-80 sm:w-72 sm:h-96 bg-white dark:bg-darkSurface rounded-3xl shadow-2xl border border-white/50 dark:border-slate-700 overflow-hidden transform -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 origin-center z-10" data-x="300" data-y="200" data-r="8">
+                                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80" class="w-full h-full object-cover">
+                                            <div class="absolute bottom-0 inset-x-0 p-4 bg-gradient-to-t from-black/90 to-transparent text-white font-bold">VLSI & Embedded</div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="py-24 bg-white dark:bg-darkBg relative z-10">
+                                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                    <div class="text-center mb-20">
+                                        <h2 class="text-primary dark:text-indigo-400 font-bold tracking-widest uppercase text-xs mb-3">Why Choose Us?</h2>
+                                        <p class="text-4xl font-extrabold text-slate-900 dark:text-white">Everything You Need to Succeed</p>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        <!-- Feature Card 1 -->
+                                        <div class="p-8 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 hover:shadow-2xl hover:shadow-blue-500/10 transition duration-500 group">
+                                            <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-4xl shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300 text-blue-500">📚</div>
+                                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Unit-wise Notes</h3>
+                                            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Concise, exam-oriented PDF notes following exact R18/R22 syllabus copy. Optimized for quick revision.</p>
+                                        </div>
+                                        <!-- Feature Card 2 -->
+                                        <div class="p-8 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 hover:shadow-2xl hover:shadow-amber-500/10 transition duration-500 group">
+                                            <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-4xl shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300 text-amber-500">🎯</div>
+                                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Gunshot Questions</h3>
+                                            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Top 20 questions that have appeared repeatedly in the last 10 years. Study smart, not hard.</p>
+                                        </div>
+                                        <!-- Feature Card 3 -->
+                                        <div class="p-8 rounded-[2rem] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 hover:shadow-2xl hover:shadow-purple-500/10 transition duration-500 group">
+                                            <div class="w-16 h-16 bg-white dark:bg-slate-700 rounded-2xl flex items-center justify-center text-4xl shadow-sm mb-6 group-hover:scale-110 transition-transform duration-300 text-purple-500">💸</div>
+                                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3">Pocket Friendly</h3>
+                                            <p class="text-slate-600 dark:text-slate-400 leading-relaxed">Just ₹30/month. Less than a single meal at the canteen. Unbeatable value for premium content.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- FEEDBACK SECTION -->
+                            <div class="bg-indigo-50/50 dark:bg-slate-800/30 py-24 border-t border-slate-100 dark:border-slate-800">
+                                <div class="max-w-3xl mx-auto px-4 text-center">
+                                    <span class="text-4xl mb-4 block">💬</span>
+                                    <h2 class="text-3xl font-bold text-slate-900 dark:text-white mb-4">We Value Your Feedback</h2>
+                                    <p class="text-slate-600 dark:text-slate-300 mb-10 text-lg">Help us improve your learning experience. Your voice matters.</p>
+                                    <form onsubmit="app.handleFeedbackSubmit(event)" class="max-w-lg mx-auto space-y-5 bg-white dark:bg-darkSurface p-8 rounded-3xl shadow-xl shadow-indigo-500/5 border border-white/50 dark:border-slate-700">
+                                        ${feedbackInput}
+                                        <textarea id="feedback-msg" required rows="4" placeholder="Share your thoughts..." class="w-full px-5 py-4 rounded-xl border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition dark:text-white resize-none"></textarea>
+                                        <button type="submit" class="bg-primary text-white font-bold px-8 py-4 rounded-xl hover:bg-primaryDark transition shadow-lg shadow-indigo-500/20 w-full text-lg">Submit Feedback</button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                             <!-- Big Giants Company Logos Marquee -->
+                            <div class="py-16 bg-white dark:bg-darkSurface border-t border-gray-100 dark:border-gray-700 overflow-hidden">
+                                <div class="text-center mb-10">
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Top Recruiters & Industry Giants</h3>
+                                    <p class="text-gray-500 dark:text-gray-400 mt-2">Prepare for careers at the world's leading companies.</p>
+                                </div>
+                                <div class="relative w-full">
+                                    <div class="absolute top-0 left-0 h-full w-32 bg-gradient-to-r from-white dark:from-darkSurface to-transparent z-10 pointer-events-none"></div>
+                                    <div class="absolute top-0 right-0 h-full w-32 bg-gradient-to-l from-white dark:from-darkSurface to-transparent z-10 pointer-events-none"></div>
+                                    
+                                    <div id="companies-track" class="flex space-x-12 w-max items-center animate-scroll-left hover:pause pl-4">
+                                        <!-- Original Logos -->
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" class="h-10 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg" alt="Tesla" class="h-6 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg" alt="Oracle" class="h-6 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Intel_logo.svg" alt="Intel" class="h-8 w-auto">
+                                        </div>
+
+                                        <!-- Duplicates for seamless loop -->
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg" alt="Microsoft" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Meta_Platforms_Inc._logo.svg" alt="Meta" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple" class="h-10 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg" alt="Tesla" class="h-6 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg" alt="IBM" class="h-8 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/Oracle_logo.svg" alt="Oracle" class="h-6 w-auto">
+                                        </div>
+                                        <div class="flex items-center justify-center w-40 h-24 bg-white rounded-xl shadow-sm border border-slate-100 px-4 grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer">
+                                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/Intel_logo.svg" alt="Intel" class="h-8 w-auto">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                },
+
+                renderDashboard: (c) => {
+                    const u = app.state.currentUser;
+                    const filteredSubjects = app.getFilteredSubjects();
+                    const today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+                    
+                    // Filter feedback for current user
+                    const myFeedbacks = app.state.feedbacks.filter(f => f.email === u.email);
+
+                    // REMOVED QUIZ STATS LOGIC
+
+                    let contentHTML = '';
+
+                    if (filteredSubjects.length === 0) {
+                        contentHTML = `
+                            <div class="bg-white dark:bg-darkSurface p-10 rounded-2xl text-center border border-dashed border-gray-300 dark:border-gray-700">
+                                <div class="text-6xl mb-4">📭</div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white">No Content Found</h3>
+                                <p class="text-gray-500 dark:text-gray-400 mt-2">We haven't added subjects for <span class="font-bold">${u.branch}, Year ${u.year}, Sem ${u.semester}</span> yet.</p>
+                                <p class="text-sm text-gray-400 mt-1">Try changing your details in profile or contact support.</p>
+                            </div>
+                        `;
+                    } else {
+                        contentHTML = filteredSubjects.map(sub => `
+                            <div onclick="app.router('notes')" class="bg-white dark:bg-darkSurface p-5 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition cursor-pointer group">
+                                <div class="flex justify-between items-start mb-4">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-lg bg-${sub.color}-100 dark:bg-${sub.color}-900/30 flex items-center justify-center text-${sub.color}-600 dark:text-${sub.color}-400 font-bold text-xs">
+                                            ${sub.code.substring(0,2)}
+                                        </div>
+                                        <div>
+                                            <h4 class="font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-blue-400 transition">${sub.title}</h4>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400 font-mono">${sub.code} • ${sub.units} Units</p>
+                                        </div>
+                                    </div>
+                                    <span class="text-xs font-bold bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-300 px-2 py-1 rounded border border-gray-200 dark:border-gray-700">${sub.progress}%</span>
+                                </div>
+                                <div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 mb-2">
+                                    <div class="bg-${sub.color}-500 h-2 rounded-full transition-all duration-1000" style="width: ${sub.progress}%"></div>
+                                </div>
+                                <div class="flex justify-end">
+                                    <span class="text-xs text-primary dark:text-blue-400 font-medium group-hover:underline">Continue Learning →</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    c.innerHTML = `
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+                            <div class="flex flex-col md:flex-row justify-between items-end mb-8">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">${today}</p>
+                                    <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Hello, ${u.name.split(' ')[0]}! 👋</h2>
+                                    <p class="text-gray-600 dark:text-gray-300 mt-1">${u.branch} • Year ${u.year} • Semester ${u.semester}</p>
+                                </div>
+                                <div class="mt-4 md:mt-0 flex gap-3">
+                                    <button onclick="app.router('notes')" class="bg-white dark:bg-darkSurface border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm transition">Video Library</button>
+                                    <button onclick="app.router('questions')" class="bg-primary text-white px-4 py-2 rounded-lg font-medium hover:bg-primaryDark transition shadow-md">View Important Qs</button>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                                <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-5">
+                                    <div class="w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xl font-bold">📊</div>
+                                    <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Attendance</p><p class="text-2xl font-bold text-gray-900 dark:text-white">${u.attendance}</p></div>
+                                </div>
+                                <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-5">
+                                    <div class="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 text-xl font-bold">🎓</div>
+                                    <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">CGPA</p><p class="text-2xl font-bold text-gray-900 dark:text-white">${u.cgpa}</p></div>
+                                </div>
+                                <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-5">
+                                    <div class="w-12 h-12 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-amber-600 dark:text-amber-400 text-xl font-bold">⚠️</div>
+                                    <div><p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Active Backlogs</p><p class="text-2xl font-bold text-gray-900 dark:text-white">0</p></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                                <div class="lg:col-span-2 space-y-8">
+                                    <div>
+                                        <h3 class="font-bold text-gray-900 dark:text-white text-xl mb-4">My Subjects <span class="text-sm font-normal text-gray-500 dark:text-gray-400 ml-2">(Sem ${u.semester})</span></h3>
+                                        <div class="space-y-4">
+                                            ${contentHTML}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <div class="space-y-8">
+                                    <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <h3 class="font-bold text-gray-900 dark:text-white mb-4">Overall Completion</h3>
+                                        <div class="chart-container"><canvas id="studentChart"></canvas></div>
+                                    </div>
+                                    <!-- NEW: SGPA TREND CHART -->
+                                    <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <h3 class="font-bold text-gray-900 dark:text-white mb-4">Performance Trend</h3>
+                                        <div class="chart-container"><canvas id="sgpaChart"></canvas></div>
+                                    </div>
+                                    <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <h3 class="font-bold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
+                                        <div class="space-y-4">
+                                            ${app.data.recentActivity.map(act => `<div class="flex items-start gap-3 pb-3 border-b border-gray-50 dark:border-gray-700 last:border-0 last:pb-0"><div class="mt-1">${act.icon}</div><div><p class="text-sm font-semibold text-gray-800 dark:text-gray-200">${act.title}</p><p class="text-xs text-gray-500 dark:text-gray-400">${act.time}</p></div></div>`).join('')}
+                                        </div>
+                                    </div>
+                                    <!-- NEW: My Support Tickets Section -->
+                                    <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm">
+                                        <h3 class="font-bold text-gray-900 dark:text-white mb-4">My Support Tickets</h3>
+                                        <div class="space-y-4">
+                                            ${myFeedbacks.length ? myFeedbacks.map(f => `
+                                                <div class="p-3 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
+                                                    <div class="flex justify-between items-center mb-2">
+                                                        <span class="text-xs text-gray-500">${f.date}</span>
+                                                        ${f.reply 
+                                                            ? '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-green-100 text-green-700">Replied</span>' 
+                                                            : '<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-yellow-100 text-yellow-700">Pending</span>'}
+                                                    </div>
+                                                    <p class="text-sm text-gray-800 dark:text-gray-200 mb-2">"${f.message}"</p>
+                                                    ${f.reply ? `
+                                                        <div class="pl-3 border-l-2 border-primary bg-blue-50/50 dark:bg-blue-900/10 p-2 rounded-r-lg">
+                                                            <p class="text-[10px] font-bold text-primary mb-0.5">Admin Reply:</p>
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">${f.reply}</p>
+                                                        </div>
+                                                    ` : ''}
+                                                </div>
+                                            `).join('') : '<p class="text-sm text-gray-500 text-center py-2">No tickets raised.</p>'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    setTimeout(() => {
+                        const ctx = document.getElementById('studentChart');
+                        if(ctx) {
+                            let avg = 0;
+                            if (filteredSubjects.length > 0) {
+                                const totalProgress = filteredSubjects.reduce((acc, curr) => acc + curr.progress, 0);
+                                avg = Math.round(totalProgress / filteredSubjects.length);
+                            }
+                            
+                            new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: ['Completed', 'Remaining'],
+                                    datasets: [{ 
+                                        data: [avg, 100-avg], 
+                                        backgroundColor: ['#4338ca', app.state.theme === 'dark' ? '#1e293b' : '#f1f5f9'], 
+                                        borderWidth: 0, 
+                                        hoverOffset: 4 
+                                    }]
+                                },
+                                options: { cutout: '75%', responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: { animateScale: true, animateRotate: true } },
+                                plugins: [{
+                                    id: 'textCenter',
+                                    beforeDraw: function(chart) {
+                                        var width = chart.width, height = chart.height, ctx = chart.ctx;
+                                        ctx.restore();
+                                        var fontSize = (height / 114).toFixed(2);
+                                        ctx.font = "bold " + fontSize + "em sans-serif";
+                                        ctx.textBaseline = "middle";
+                                        ctx.fillStyle = "#1e3a8a";
+                                        var text = avg + "%", textX = Math.round((width - ctx.measureText(text).width) / 2), textY = height / 2;
+                                        ctx.fillText(text, textX, textY);
+                                        ctx.save();
+                                    }
+                                }]
+                            });
+                        }
+
+                        // NEW: SGPA Chart Render
+                        const sgpaCtx = document.getElementById('sgpaChart');
+                        if(sgpaCtx) {
+                            new Chart(sgpaCtx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+                                    datasets: [{
+                                        label: 'SGPA',
+                                        data: [7.2, 7.8, 8.1, u.cgpa],
+                                        borderColor: '#d97706',
+                                        backgroundColor: 'rgba(217, 119, 6, 0.1)',
+                                        fill: true,
+                                        tension: 0.4
+                                    }]
+                                },
+                                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { min: 5, max: 10 } } }
+                            });
+                        }
+                    }, 100);
+                },
+
+                renderProfile: (c) => {
+                    const u = app.state.currentUser;
+                    const avatar = u.profileImage 
+                        ? `<img src="${u.profileImage}" class="w-32 h-32 rounded-full object-cover border-4 border-white dark:border-darkSurface shadow-lg">` 
+                        : `<div class="w-32 h-32 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-5xl font-bold text-gray-400 dark:text-gray-500 border-4 border-white dark:border-darkSurface shadow-lg">${u.name.charAt(0)}</div>`;
+                    
+                    const isDark = app.state.theme === 'dark';
+
+                    c.innerHTML = `
+                        <div class="max-w-4xl mx-auto px-4 py-12 fade-in">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">My Profile</h2>
+                            <div class="bg-white dark:bg-darkSurface rounded-3xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                <div class="h-40 bg-gradient-to-r from-primaryDark to-primary relative overflow-hidden">
+                                    <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                                    <div class="absolute top-4 right-4 bg-white/10 backdrop-blur-md text-white text-xs px-3 py-1 rounded-full border border-white/20">Valid till May 2026</div>
+                                </div>
+                                <div class="px-8 pb-8 relative">
+                                    <div class="absolute -top-16 left-8 p-1.5 bg-white dark:bg-darkSurface rounded-full transition-colors">
+                                        ${avatar}
+                                    </div>
+                                    <div class="ml-40 pt-4 flex flex-col md:flex-row md:items-start md:justify-between">
+                                        <div><h3 class="text-3xl font-bold text-gray-900 dark:text-white">${u.name}</h3><p class="text-gray-500 dark:text-gray-400 font-medium">${u.branch} Student • ${u.university}</p></div>
+                                        <div class="mt-4 md:mt-0"><button onclick="app.router('edit-profile')" class="px-4 py-2 bg-primary text-white text-sm font-bold rounded-lg shadow-sm hover:bg-primaryDark transition">Edit Profile</button></div>
+                                    </div>
+                                    <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-10">
+                                        <div>
+                                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Academic Details</h4>
+                                            <div class="space-y-4">
+                                                <div class="flex justify-between"><span class="text-gray-600 dark:text-gray-400 font-medium">Roll Number</span><span class="font-mono font-bold text-gray-900 dark:text-white bg-gray-50 dark:bg-gray-800 px-2 py-0.5 rounded">${u.roll}</span></div>
+                                                <div class="flex justify-between"><span class="text-gray-600 dark:text-gray-400 font-medium">Current Year</span><span class="font-bold text-gray-900 dark:text-white">Year ${u.year}</span></div>
+                                                <div class="flex justify-between"><span class="text-gray-600 dark:text-gray-400 font-medium">Current Semester</span><span class="font-bold text-gray-900 dark:text-white">${u.semester}</span></div>
+                                                <div class="flex justify-between"><span class="text-gray-600 dark:text-gray-400 font-medium">Branch</span><span class="font-bold text-gray-900 dark:text-white">${u.branch}</span></div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Preferences</h4>
+                                            <div class="space-y-4">
+                                                <div class="flex items-center justify-between"><span class="text-gray-700 dark:text-gray-300 font-medium">Email Notifications</span><input type="checkbox" checked class="w-5 h-5 text-primary rounded"></div>
+                                                <div class="flex items-center justify-between">
+                                                    <span class="text-gray-700 dark:text-gray-300 font-medium">Dark Mode (Beta)</span>
+                                                    <input type="checkbox" onchange="app.toggleTheme()" ${isDark ? 'checked' : ''} class="w-5 h-5 text-primary rounded cursor-pointer">
+                                                </div>
+                                            </div>
+                                            <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
+                                                <button onclick="app.logout()" class="text-red-600 dark:text-red-400 font-bold hover:text-red-800 dark:hover:text-red-300 text-sm flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>Sign Out of Device</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                },
+
+                renderEditProfile: (c) => {
+                    const u = app.state.currentUser;
+                    const avatarSrc = u.profileImage ? u.profileImage : null;
+                    const avatar = avatarSrc 
+                        ? `<img src="${avatarSrc}" id="profile-preview-img" class="w-24 h-24 rounded-full object-cover border-4 border-gray-100 dark:border-gray-700 shadow-md">` 
+                        : `<div id="profile-preview-div" class="w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-4xl font-bold text-gray-400 dark:text-gray-500 border-4 border-white dark:border-gray-700 shadow-md">${u.name.charAt(0)}</div>`;
+                    
+                    const previewHtml = `<div class="relative">
+                        ${avatar}
+                        <img id="profile-preview-img" class="w-24 h-24 rounded-full object-cover border-4 border-gray-100 dark:border-gray-700 shadow-md absolute top-0 left-0 ${avatarSrc ? '' : 'hidden'}" src="${avatarSrc || ''}">
+                    </div>`;
+
+                    c.innerHTML = `
+                        <div class="max-w-2xl mx-auto px-4 py-12 fade-in">
+                            <div class="bg-white dark:bg-darkSurface rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                                <div class="p-6 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">Edit Profile</h2>
+                                    <button onclick="app.router('profile')" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                                </div>
+                                <form onsubmit="app.handleProfileUpdate(event)" class="p-8 space-y-6">
+                                    <div class="flex items-center gap-6 mb-6">
+                                        <div id="preview-container">${previewHtml}</div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profile Photo</label>
+                                            <input type="file" id="edit-image" accept="image/*" onchange="app.handleImagePreview(event)" class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-primary hover:file:bg-blue-100 dark:file:bg-gray-700 dark:file:text-blue-400 transition cursor-pointer">
+                                            <p class="text-xs text-gray-400 mt-1">JPG, PNG or GIF. Max 2MB.</p>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Full Name</label><input type="text" id="edit-name" value="${u.name}" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"></div>
+                                        <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">University</label><select id="edit-uni" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"><option value="JNTUH" ${u.university==='JNTUH'?'selected':''}>JNTUH</option><option value="OU" ${u.university==='OU'?'selected':''}>Osmania (OU)</option></select></div>
+                                        <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Roll Number</label><input type="text" id="edit-roll" value="${u.roll}" required class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"></div>
+                                        
+                                        <div>
+                                            <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Branch</label>
+                                            <select id="edit-branch" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition">
+                                                ${app.state.branches.map(b => `<option value="${b}" ${u.branch===b?'selected':''}>${b}</option>`).join('')}
+                                            </select>
+                                        </div>
+
+                                        <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Year</label><select id="edit-year" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"><option value="1" ${u.year==='1'?'selected':''}>1st Year</option><option value="2" ${u.year==='2'?'selected':''}>2nd Year</option><option value="3" ${u.year==='3'?'selected':''}>3rd Year</option><option value="4" ${u.year==='4'?'selected':''}>4th Year</option></select></div>
+                                        <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Semester</label><select id="edit-sem" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary outline-none transition"><option value="1" ${u.semester==='1'?'selected':''}>1st Sem</option><option value="2" ${u.semester==='2'?'selected':''}>2nd Sem</option></select></div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Email Address <span class="text-xs font-normal text-red-500 ml-1">(Cannot be changed)</span></label>
+                                        <input type="email" value="${u.email}" disabled class="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 cursor-not-allowed">
+                                    </div>
+                                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
+                                        <button type="button" onclick="app.router('profile')" class="px-5 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
+                                        <button type="submit" class="px-6 py-2.5 rounded-lg bg-primary text-white font-bold hover:bg-primaryDark shadow-lg transition">Save Changes</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    `;
+                },
+
+                renderNotes: (c) => {
+                    const u = app.state.currentUser; const subs = app.getFilteredSubjects();
+                    let list = subs.length ? subs.map(s => `
+                        <div class="bg-white dark:bg-darkSurface rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-lg transition group">
+                            <div class="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 flex items-center justify-center relative">
+                                <div class="absolute inset-0 bg-black/10"></div>
+                                <h3 class="text-white font-bold text-xl px-4 text-center relative z-10">${s.title}</h3>
+                            </div>
+                            <div class="p-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <span class="text-xs font-mono bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700">${s.code}</span>
+                                    <span class="text-xs font-medium text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">${s.units} Units Ready</span>
+                                </div>
+                                <div class="space-y-3">
+                                    <button onclick="window.open('${s.pdfLink}', '_blank')" class="w-full flex items-center justify-center space-x-2 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        <span>View PDF Notes</span>
+                                    </button>
+                                    <button onclick="window.open('${s.videoLink}', '_blank')" class="w-full flex items-center justify-center space-x-2 py-2.5 bg-primary text-white rounded-lg hover:bg-primaryDark transition text-sm font-medium shadow-sm">
+                                        <span>Watch Videos</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('') : `<div class="col-span-3 text-center py-10"><div class="text-4xl mb-3">📭</div><p class="text-gray-500 dark:text-gray-400">No content available for your selected Branch/Year/Sem.</p></div>`;
+                    
+                    c.innerHTML = `<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 fade-in"><div class="mb-8"><h2 class="text-3xl font-bold text-gray-900 dark:text-white">Notes & Video Library</h2><p class="text-gray-500 dark:text-gray-400 mt-2">Showing content for <span class="font-bold text-primary dark:text-blue-400">${u.branch} - ${u.university} - Year ${u.year}, Sem ${u.semester}</span></p></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">${list}</div></div>`;
+                },
+
+                renderQuestions: (c) => {
+                    const u = app.state.currentUser; const subs = app.getFilteredSubjects();
+                    let list = subs.length ? subs.filter(s=>s.impQ).map(s => `<div class="p-6 flex flex-col md:flex-row items-start md:items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition group"><div class="mb-4 md:mb-0"><h3 class="text-lg font-bold text-gray-900 dark:text-white group-hover:text-primary dark:group-hover:text-blue-400 transition">${s.title}</h3><p class="text-sm text-gray-500 dark:text-gray-400">${s.code} • Last Updated: Oct 2023</p></div><div class="flex space-x-3"><button onclick="app.showToast('Previewing...', '👀')" class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-white dark:bg-darkSurface border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700">Preview</button><button onclick="window.open('${s.pdfLink}', '_blank')" class="px-4 py-2 text-sm font-medium text-white bg-secondary rounded-lg hover:bg-amber-700 shadow-sm flex items-center transition"><svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>Download PDF</button></div></div>`).join('') : `<p class="p-8 text-center text-gray-500 dark:text-gray-400">No important questions found.</p>`;
+                    c.innerHTML = `<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 fade-in"><div class="text-center mb-10"><span class="text-secondary font-bold tracking-wider text-xs uppercase bg-amber-50 dark:bg-amber-900/30 px-3 py-1 rounded-full">Exam Prep Mode</span><h2 class="text-3xl font-bold text-gray-900 dark:text-white mt-4">Important "Gunshot" Questions</h2><p class="text-gray-500 dark:text-gray-400 mt-2">Curated from previous 10 years for ${u.branch} Year ${u.year} Semester ${u.semester}</p></div><div class="bg-white dark:bg-darkSurface rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 divide-y divide-gray-100 dark:divide-gray-700">${list}</div></div>`;
+                },
+
+                renderContact: (c) => { c.innerHTML = `<div class="max-w-4xl mx-auto px-4 py-12 fade-in"><div class="text-center mb-12"><h2 class="text-3xl font-bold text-gray-900 dark:text-white">Get in Touch</h2><p class="text-gray-500 dark:text-gray-400 mt-2">Have a question? We're here to help.</p></div><div class="grid grid-cols-1 md:grid-cols-3 gap-8"><div class="col-span-1 space-y-6"><div class="bg-white dark:bg-darkSurface p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"><div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center text-primary dark:text-blue-400 mb-4">📧</div><h3 class="font-bold text-gray-900 dark:text-white">Email</h3><p class="text-sm text-gray-500 dark:text-gray-400 mt-1">support@btechconnect.com</p></div><div class="bg-white dark:bg-darkSurface p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700"><div class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center text-green-600 dark:text-green-400 mb-4">📱</div><h3 class="font-bold text-gray-900 dark:text-white">WhatsApp</h3><p class="text-sm text-gray-500 dark:text-gray-400 mt-1">+91 98765 43210</p></div></div><div class="col-span-2 bg-white dark:bg-darkSurface rounded-2xl shadow-lg border border-gray-100 dark:border-gray-700 p-8"><form onsubmit="app.handleContactSubmit(event)" class="space-y-6"><div class="grid grid-cols-2 gap-6"><div><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">First Name</label><input type="text" required class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div><div><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Last Name</label><input type="text" required class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div></div><div><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Email Address</label><input type="email" required class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div><div><label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Message</label><textarea rows="4" required class="w-full px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></textarea></div><button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primaryDark transition shadow-md">Send Message</button></form></div></div></div>`; },
+                
+                renderAdmin: (c) => {
+                    const studentCount = app.state.users.filter(u => u.role !== 'admin').length;
+                    const revenue = studentCount * 30; // 30 Rupees per student mock
+                    const activeCount = Math.floor(studentCount * 0.8); // Mock 80% active
+
+                    c.innerHTML = `
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+                        <!-- Header -->
+                        <div class="mb-8 flex justify-between items-center">
+                            <div>
+                                <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h2>
+                                <p class="text-gray-500 dark:text-gray-400 mt-1">Overview of platform performance and student data.</p>
+                            </div>
+                            <div class="flex gap-3">
+                                 <button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md hover:bg-primaryDark transition">Download Report</button>
+                            </div>
+                        </div>
+
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <!-- Total Users -->
+                            <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center justify-between hover:shadow-md transition">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Students</p>
+                                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1">${studentCount}</h3>
+                                    <p class="text-xs text-green-500 font-bold mt-1">↑ 12% this week</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-primary dark:text-blue-400 text-xl">👥</div>
+                            </div>
+
+                            <!-- Active Users -->
+                            <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center justify-between hover:shadow-md transition">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Active Now</p>
+                                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1">${activeCount}</h3>
+                                    <p class="text-xs text-green-500 font-bold mt-1">● Online</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center text-green-600 dark:text-green-400 text-xl">⚡</div>
+                            </div>
+
+                            <!-- Income -->
+                            <div class="bg-white dark:bg-darkSurface p-6 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm flex items-center justify-between hover:shadow-md transition">
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Total Revenue</p>
+                                    <h3 class="text-3xl font-bold text-gray-900 dark:text-white mt-1">₹${revenue}</h3>
+                                    <p class="text-xs text-gray-400 mt-1">Based on ₹30/mo plan</p>
+                                </div>
+                                <div class="w-12 h-12 rounded-xl bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center text-secondary dark:text-amber-400 text-xl">₹</div>
+                            </div>
+                        </div>
+
+                        <!-- Feedback Section (NEW) -->
+                        <div class="mb-8 bg-white dark:bg-darkSurface rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden p-6">
+                            <h3 class="font-bold text-gray-900 dark:text-white text-lg mb-4">Student Feedback</h3>
+                            <div class="space-y-4">
+                                ${app.state.feedbacks.map(f => `
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl border border-gray-100 dark:border-gray-700">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div>
+                                                <span class="font-bold text-gray-900 dark:text-white">${f.name}</span>
+                                                <span class="text-xs text-gray-500 ml-2">${f.date}</span>
+                                            </div>
+                                            ${f.reply ? '<span class="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">Replied</span>' : '<span class="text-xs bg-yellow-100 text-yellow-600 px-2 py-1 rounded">Pending</span>'}
+                                        </div>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">"${f.message}"</p>
+                                        
+                                        ${f.reply ? 
+                                            `<div class="pl-4 border-l-2 border-primary mt-2">
+                                                <p class="text-xs font-bold text-primary mb-1">Admin Reply:</p>
+                                                <p class="text-sm text-gray-600 dark:text-gray-400">${f.reply}</p>
+                                            </div>` 
+                                            : 
+                                            `<form onsubmit="app.handleAdminReply(event, ${f.id})" class="flex gap-2 mt-2">
+                                                <input type="text" name="reply" required placeholder="Type your reply..." class="flex-grow px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 dark:text-white outline-none focus:border-primary">
+                                                <button type="submit" class="px-3 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primaryDark">Send</button>
+                                            </form>`
+                                        }
+                                    </div>
+                                `).join('')}
+                                ${app.state.feedbacks.length === 0 ? '<p class="text-gray-500 text-center text-sm">No feedback yet.</p>' : ''}
+                            </div>
+                        </div>
+
+                        <!-- Table Section -->
+                        <div class="bg-white dark:bg-darkSurface rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
+                            <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex flex-col md:flex-row justify-between items-center gap-4">
+                                <h3 class="font-bold text-gray-900 dark:text-white text-lg">Student Directory</h3>
+                                <input type="text" placeholder="Search students..." class="w-full md:w-auto px-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary dark:text-white transition">
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left border-collapse">
+                                    <thead class="bg-gray-50 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 uppercase text-xs font-bold border-b border-gray-100 dark:border-gray-700">
+                                        <tr>
+                                            <th class="px-6 py-4">Student Name</th>
+                                            <th class="px-6 py-4">Status</th>
+                                            <th class="px-6 py-4">University</th>
+                                            <th class="px-6 py-4">Branch/Year</th>
+                                            <th class="px-6 py-4">Plan</th>
+                                            <th class="px-6 py-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+                                        ${app.state.users.map(u => {
+                                            if(u.role === 'admin') return ''; 
+                                            const status = Math.random() > 0.3 ? 'Active' : 'Inactive';
+                                            const statusColor = status === 'Active' ? 'green' : 'gray';
+                                            
+                                            return `
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition duration-150">
+                                                <td class="px-6 py-4">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-blue-500 text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                                                            ${u.name.charAt(0)}
+                                                        </div>
+                                                        <div>
+                                                            <p class="font-bold text-gray-900 dark:text-white">${u.name}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-400">${u.email}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="px-6 py-4">
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-${statusColor}-100 text-${statusColor}-800 dark:bg-${statusColor}-900/30 dark:text-${statusColor}-400 border border-${statusColor}-200 dark:border-${statusColor}-900">
+                                                        <span class="w-1.5 h-1.5 bg-${statusColor}-500 rounded-full mr-1.5"></span>
+                                                        ${status}
+                                                    </span>
+                                                </td>
+                                                <td class="px-6 py-4 font-medium text-gray-700 dark:text-gray-300">
+                                                    <span class="px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-xs font-bold text-gray-600 dark:text-gray-300">${u.university}</span>
+                                                </td>
+                                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400">${u.branch} • ${u.year}-${u.semester}</td>
+                                                <td class="px-6 py-4 text-gray-600 dark:text-gray-400 font-medium">Premium (₹30)</td>
+                                                <td class="px-6 py-4 text-right">
+                                                    <button class="text-gray-400 hover:text-primary dark:hover:text-blue-400 transition p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full">
+                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            `
+                                        }).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="px-6 py-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 bg-gray-50/50 dark:bg-gray-800/30">
+                                <span>Showing all ${studentCount} students</span>
+                                <div class="flex gap-2">
+                                    <button class="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded hover:bg-white dark:hover:bg-gray-700 disabled:opacity-50 transition" disabled>Previous</button>
+                                    <button class="px-3 py-1 border border-gray-200 dark:border-gray-700 rounded hover:bg-white dark:hover:bg-gray-700 transition">Next</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                },
+
+                renderLoginForm: (c) => { c.innerHTML = `
+                    <div class="slide-up">
+                        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Welcome Back</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Enter your details.</p>
+                        <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs rounded border border-red-100 dark:border-red-900 font-medium"></div>
+                        <form onsubmit="app.handleLogin(event)" class="space-y-4">
+                            <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Email</label><input type="email" id="login-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div>
+                            <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Password</label><input type="password" id="login-pass" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div>
+                            <div class="flex justify-end mt-1"><button type="button" onclick="app.views.renderForgotPasswordForm(document.getElementById('auth-content'))" class="text-xs text-primary dark:text-blue-400 hover:underline font-medium">Forgot Password?</button></div>
+                            <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primaryDark transition shadow-lg">Log In</button>
+                        </form>
+                        <div class="mt-6 text-center text-sm"><span class="text-gray-500 dark:text-gray-400">New Student?</span><button onclick="app.views.renderSignupForm(document.getElementById('auth-content'))" class="text-primary dark:text-blue-400 font-bold hover:underline ml-1">Create Account</button></div>
+                    </div>`; 
+                },
+                renderForgotPasswordForm: (c) => { c.innerHTML = `
+                    <div class="slide-up">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Reset Password</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Enter your registered email to receive a verification code.</p>
+                        <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs rounded border border-red-100 dark:border-red-900 font-medium"></div>
+                        <form onsubmit="app.handleForgotPassword(event)" class="space-y-4">
+                            <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Email Address</label><input type="email" id="reset-email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div>
+                            <button type="submit" class="w-full bg-primary text-white font-bold py-3.5 rounded-xl hover:bg-primaryDark transition shadow-lg">Send Verification Code</button>
+                        </form>
+                        <div class="mt-6 text-center"><button onclick="app.views.renderLoginForm(document.getElementById('auth-content'))" class="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">Back to Login</button></div>
+                    </div>`; 
+                },
+                renderVerifyCodeForm: (c) => { c.innerHTML = `
+                    <div class="slide-up">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Verify Email</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Enter the 4-digit code sent to <b>${app.state.resetFlow.email}</b></p>
+                        <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs rounded border border-red-100 dark:border-red-900 font-medium"></div>
+                        <form onsubmit="app.handleVerifyCode(event)" class="space-y-4">
+                            <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Verification Code</label><input type="text" id="reset-code" placeholder="1234" maxlength="4" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition text-center tracking-widest text-lg font-mono"></div>
+                            <button type="submit" class="w-full bg-secondary text-white font-bold py-3.5 rounded-xl hover:bg-amber-600 transition shadow-lg">Verify Code</button>
+                        </form>
+                        <div class="mt-6 text-center"><button onclick="app.views.renderLoginForm(document.getElementById('auth-content'))" class="text-sm text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">Cancel</button></div>
+                    </div>`; 
+                },
+                renderNewPasswordForm: (c) => { c.innerHTML = `
+                    <div class="slide-up">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">New Password</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Create a strong password for your account.</p>
+                        <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs rounded border border-red-100 dark:border-red-900 font-medium"></div>
+                        <form onsubmit="app.handleResetPassword(event)" class="space-y-4">
+                            <div><label class="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">New Password</label><input type="password" id="new-password" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary outline-none bg-gray-50 dark:bg-gray-800 dark:text-white transition"></div>
+                            <button type="submit" class="w-full bg-green-600 text-white font-bold py-3.5 rounded-xl hover:bg-green-700 transition shadow-lg">Update Password</button>
+                        </form>
+                    </div>`; 
+                },
+                renderSignupForm: (c) => { c.innerHTML = `
+                    <div class="slide-up">
+                        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Create Account</h2>
+                        <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Start your journey.</p>
+                        <div id="auth-error" class="hidden mb-4 p-3 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs rounded border border-red-100 dark:border-red-900 font-medium"></div>
+                        <form onsubmit="app.handleSignup(event)" class="space-y-3">
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Name</label><input type="text" id="signup-name" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none"></div>
+                                <div><label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">University</label><select id="signup-uni" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none"><option value="JNTUH">JNTUH</option><option value="OU">OU</option></select></div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Branch</label>
+                                <select id="signup-branch" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none">
+                                    ${app.state.branches.map(b => `<option value="${b}">${b}</option>`).join('')}
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div><label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Year</label><select id="signup-year" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none"><option value="1">1st</option><option value="2">2nd</option><option value="3">3rd</option><option value="4">4th</option></select></div>
+                                <div><label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Semester</label><select id="signup-sem" class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none"><option value="1">1st</option><option value="2">2nd</option></select></div>
+                            </div>
+                            <div><label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Roll No</label><input type="text" id="signup-roll" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none"></div>
+                            <div><label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Email</label><input type="email" id="signup-email" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none" placeholder="example@gmail.com"></div>
+                            <div>
+                                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                                <input type="password" id="signup-pass" oninput="app.checkPasswordStrength(this.value)" required class="w-full px-3 py-2.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-primary outline-none">
+                                <div class="h-1 w-full bg-gray-200 dark:bg-gray-700 rounded mt-2 overflow-hidden">
+                                    <div id="pass-strength-bar" class="h-full w-0 transition-all duration-300 bg-red-500"></div>
+                                </div>
+                                <p id="pass-strength-text" class="text-[10px] text-right mt-1 text-gray-400">Strength: Too Short</p>
+                            </div>
+                            <button type="submit" class="w-full bg-secondary text-white font-bold py-3 rounded-xl hover:bg-amber-600 transition shadow-lg mt-2">Sign Up</button>
+                        </form>
+                        <div class="mt-4 text-center text-sm"><span class="text-gray-500 dark:text-gray-400">Has account?</span><button onclick="app.views.renderLoginForm(document.getElementById('auth-content'))" class="text-primary dark:text-blue-400 font-bold hover:underline ml-1">Log In</button></div>
+                    </div>`; 
+                }
+            }
+        };
+        window.addEventListener('DOMContentLoaded', app.init);
+    </script>
+</body>
+</html>
